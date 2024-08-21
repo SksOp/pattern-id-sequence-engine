@@ -1,29 +1,78 @@
-package patternidsequenceengine
+package main
 
-import "fmt"
+import (
+	"fmt"
 
-func Example() {
-	// create a custom pattern
+	"github.com/pattern-id-sequence-engine/utils"
+)
 
-	customPatters := []SupportedPatterns{
-		{"C", 10, 1}, // classes ->
-		{"P", 6, 2},  // pincode
-	}
-	support := InitialiseSupports(customPatters)
-	seqService := InitialisePatternService(&support)
-
-	// based on school the pattern witll change
-
-	pattern := "YYYYMMDDCCPPPP"
-	lastID := "2019010101000001"
+// Test one with built in configration
+func main() {
 	/*
-		where YYYY -> 2019
-		MM -> 01
-		DD -> 01
-		CCCC -> 01
-		PP -> 000001
+	 max N supported in sequence is 18
 	*/
+	pattern := "DDYYYMMN"
 
-	nextID, err := seqService.CreateNextSequenceID(pattern, lastID)
+	next, err := utils.GetNextId(pattern, "")
+	if err != nil {
+		fmt.Printf("%s\n", err)
+	}
+	fmt.Println(next)
 
+	nextId, err := utils.GetNextId(pattern, next)
+	if err != nil {
+		fmt.Println("error in creating next id", err)
+		return
+	}
+	fmt.Println(nextId)
+
+	for i := 1; i < 10; i++ {
+		nextId, err = utils.GetNextId(pattern, nextId)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println(nextId)
+	}
 }
+
+// // Test second with built in configration with custom fields
+
+// func main() {
+// 	/*
+// 	 max N supported in sequence is 18
+// 	*/
+
+// 	pattern := "DDYYKKYMMUUUUUUN"
+
+// 	custom := utils.CustomeSupport{
+// 		Customs: map[string]string{
+// 			"KK":     "00",
+// 			"UUUUUU": "696969",
+// 		},
+// 	}
+
+// 	next, err := utils.GetNextId(pattern, "", custom)
+// 	if err != nil {
+// 		fmt.Printf("%s\n", err)
+// 	}
+// 	fmt.Println(next)
+
+// 	nextId, err := utils.GetNextId(pattern, next, custom)
+// 	if err != nil {
+// 		fmt.Println("error in creating next id", err)
+// 		return
+// 	}
+// 	fmt.Println(nextId)
+
+// 	for i := 1; i < 10; i++ {
+// 		nextId, err = utils.GetNextId(pattern, nextId, custom)
+// 		if err != nil {
+// 			fmt.Println(err)
+// 			return
+// 		}
+// 		fmt.Println(nextId)
+// 	}
+// 	fmt.Println(nextId)
+
+// }
