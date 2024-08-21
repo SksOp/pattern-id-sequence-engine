@@ -15,7 +15,7 @@ func isCustomePatternValid(CustomeSupport CustomeSupport) error {
 			return fmt.Errorf("trying to override reserve keyword %s", key)
 		} else {
 			if len(key) != len(value) {
-				return fmt.Errorf("length of custom key and length of its crossponding value must")
+				return fmt.Errorf("length of custom key and length of its crossponding value must we equal")
 			}
 		}
 
